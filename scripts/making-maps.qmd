@@ -1,0 +1,27 @@
+---
+title: "Making maps with R"
+format: html
+---
+
+```{r}
+#install.packages ("sf", "tidygeocoder", "USAboundaries")"
+```
+
+```{r}
+library(sf)
+library(tidyverse)
+library(tidygeocoder)
+library(USAboundaries)
+```
+
+Get a base map of the counties of Virginia 
+
+```{r}
+plot(us_counties(states = "Virginia"))
+plot(us_states(states = "Virginia"))
+```
+
+```{r}
+
+```
+
