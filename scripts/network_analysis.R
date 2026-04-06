@@ -1,0 +1,5 @@
+install.packages("igraph")
+# install.packages('pak')
+pak::pak('thomasp85/tidygraph')
+# install.packages("pak")
+pak::pak('thomasp85/ggraph')
