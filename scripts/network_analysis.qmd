@@ -1,0 +1,57 @@
+---
+title: "Network analysis"
+format: html
+---
+
+```{r}
+#install.packages("igraph")
+
+# install.packages('pak')
+#pak::pak('thomasp85/tidygraph')
+
+# install.packages("pak")
+#pak::pak('thomasp85/ggraph')
+
+#install.packages("netrankr")
+
+library(tidyverse)
+library(igraph)
+library(tidygraph)
+library(ggraph)
+```
+
+Network data is made up of an *edge list* and a *node list*.
+
+```{r}
+edge_list <- tibble(
+  from = c(1, 2, 2, 3, 4),
+  to = c(2,3,4,2,1),
+  type = letters [1:5]
+)
+edge_list
+
+node_list <- tibble(
+  id = 1:4,
+  color = c ("red", "blue", "yellow", "green")
+)
+node_list
+```
+
+Make it network data
+```{r}
+tbl_graph(nodes = node_list, 
+          edges = edge_list,
+          directed = FALSE)
+
+#with big data igraph works better
+graph_from_data_frame(d = edge_list, 
+                      vertices = node_list,
+                      directed = FALSE) |>
+  as_tbl_graph()
+```
+
+
+
+
+
+

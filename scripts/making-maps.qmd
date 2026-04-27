@@ -1,6 +1,8 @@
 ---
 title: "Making maps with R"
 format: html
+execute: 
+  error: true
 ---
 
 ```{r}
@@ -17,11 +19,93 @@ library(USAboundaries)
 Get a base map of the counties of Virginia 
 
 ```{r}
-plot(us_counties(states = "Virginia"))
-plot(us_states(states = "Virginia"))
+counties <- us_counties (states = "Virginia")
+counties
+#plot(us_counties(states = "Virginia"))
+#plot(us_states(states = "Virginia"))
+#Do not write random text here
 ```
 
 ```{r}
+# Geometry is sticky
+counties |> 
+  select(name)
+```
+inspect the geographic side of the data 
+```{r}
+st_crs(counties)
+st_bbox(counties)
+```
+
+```{r}
+#first plot
+plot(st_geometry(counties))
+```
+
+Let's geocode some locations. with tidygeocoder
+
+```{r}
+locations <- geo(c("Blacksburg, VA", "Fairfax, VA", "Newport News, VA", "Smyth, VA"))
+locations
+
+# make locations geographic
+locations_sf <- st_as_sf(locations, 
+                      coords = c("long", "lat"),
+                      crs = 4326)
+```
+
+
+Project the data 
+
+```{r}
+state_plane(state = "VA")
+
+locations_proj <- st_transform(locations_sf, crs="EPSG:32146")
+counties_proj <- st_transform(counties, crs = "EPSG:32146")
 
 ```
+
+Let's make a map with ggplot
+
+```{r}
+ggplot() +
+  geom_sf(data = counties_proj, fill = NA) + 
+  geom_sf(data = locations_proj) +
+  theme_light()
+
+```
+#Leaflet
+
+```{r}
+library(leaflet)
+
+leaflet() |> 
+  addTiles() |> 
+  addPolygons(data = counties,
+              fillOpacity = 0,
+              color = "#000",
+              weight = 2) |>
+  addMarkers(data = locations_sf, label = ~address)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
